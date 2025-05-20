@@ -88,7 +88,7 @@ class MainWindow : public QMainWindow {
 
 public:
     explicit MainWindow(QWidget *parent = nullptr) : QMainWindow(parent) {
-        setWindowTitle(QStringLiteral("Delta Command"));
+        setWindowTitle(QStringLiteral("aether Command"));
         resize(900, 650);
 
         tabs = new CustomTabWidget(this);
@@ -286,7 +286,7 @@ private:
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     
-    app.setApplicationName(QStringLiteral("Delta Command"));
+    app.setApplicationName(QStringLiteral("aether Command"));
     app.setApplicationVersion(QStringLiteral("1.0"));
     
     QPalette darkPalette;

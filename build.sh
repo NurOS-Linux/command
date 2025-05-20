@@ -33,8 +33,8 @@ cmake -GNinja \
 ninja
 
 # Копирование исполняемого файла
-if [ -f delta_command ]; then
-    cp delta_command ..
+if [ -f aether_command ]; then
+    cp aether_command ..
     echo "Build successful!"
 else
     echo "Build failed!"
