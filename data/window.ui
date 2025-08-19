@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="AetherCommandMainWindow" parent="AdwApplicationWindow">
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="title-widget">
+              <object class="AdwWindowTitle">
+                <property name="title">Aether Command</property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <property name="content">
+          <object class="GtkBox" id="main_box">
+            <property name="orientation">vertical</property>
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+</interface>

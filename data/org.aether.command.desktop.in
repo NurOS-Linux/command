@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Aether Command
+Comment=Modern terminal emulator built with GTK4 and LibAdwaita
+Exec=@bindir@/aether-command
+Icon=utilities-terminal
+Terminal=false
+Categories=System;TerminalEmulator;
+Keywords=terminal;shell;prompt;command;
+StartupNotify=true

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.aether.command</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Aether Command</name>
+  <summary>Modern terminal emulator built with GTK4 and LibAdwaita</summary>
+  <description>
+    <p>
+      Aether Command is a modern terminal emulator that provides a clean and intuitive interface 
+      built with GTK4 and LibAdwaita. It offers a streamlined terminal experience with modern 
+      design principles.
+    </p>
+  </description>
+  <launchable type="desktop-id">org.aether.command.desktop</launchable>
+  <url type="homepage">https://github.com/NurOS-Linux/command</url>
+  <url type="bugtracker">https://github.com/NurOS-Linux/command/issues</url>
+  <developer_name>AnmiTaliDev</developer_name>
+  <update_contact>anmitali198@gmail.com</update_contact>
+  <releases>
+    <release version="@version@" date="2025-08-19">
+      <description>
+        <p>Initial release of Aether Command terminal emulator.</p>
+      </description>
+    </release>
+  </releases>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main window</caption>
+    </screenshot>
+  </screenshots>
+  <categories>
+    <category>System</category>
+    <category>TerminalEmulator</category>
+  </categories>
+  <keywords>
+    <keyword>terminal</keyword>
+    <keyword>shell</keyword>
+    <keyword>command</keyword>
+  </keywords>
+  <content_rating type="oars-1.1" />
+</component>
