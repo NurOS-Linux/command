@@ -108,9 +108,51 @@ jobs:
           name: aether-command-ubuntu
           path: "*.deb"
 
+  build-apg:
+    name: Build NurOS APG
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libgtk-4-dev libadwaita-1-dev libvte-2.91-gtk4-dev valac meson ninja-build
+
+      - name: Build project
+        run: |
+          meson setup builddir --prefix=/usr
+          ninja -C builddir
+
+      - name: Build APG package
+        run: |
+          # Prepare APG build directory
+          mkdir -p apg-build/data
+
+          # Install files
+          DESTDIR="${PWD}/apg-build/data" ninja -C builddir install
+
+          # Copy metadata
+          cp packaging/apg/metadata.json apg-build/
+
+          # Generate md5sums
+          cd apg-build
+          find data -type f -exec md5sum {} \; > md5sums
+
+          # Create APG package
+          tar -czf ../aether-command-0.1.0-alpha-x86_64.apg metadata.json md5sums data/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aether-command-apg
+          path: "*.apg"
+
   release:
     name: Create Release
-    needs: [build-arch, build-fedora, build-ubuntu]
+    needs: [build-arch, build-fedora, build-ubuntu, build-apg]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
 
@@ -125,6 +167,7 @@ jobs:
             aether-command-arch/*.pkg.tar.zst
             aether-command-fedora/*.rpm
             aether-command-ubuntu/*.deb
+            aether-command-apg/*.apg
           draft: false
           prerelease: true
           body: |
@@ -155,6 +198,11 @@ jobs:
             **Ubuntu/Debian:**
             ```bash
             sudo apt install ./aether-command_*.deb
+            ```
+
+            **NurOS:**
+            ```bash
+            tulpar install aether-command-*.apg
             ```
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
