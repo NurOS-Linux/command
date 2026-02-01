@@ -1,0 +1,11 @@
+aether-command (0.1.0~alpha-1) unstable; urgency=low
+
+  * Initial alpha release
+  * Dynamic window title tracking
+  * Tab support for multiple terminals
+  * Copy/paste keyboard shortcuts (Ctrl+Shift+C/V)
+  * Right-click context menu
+  * GTK4 and LibAdwaita integration
+  * Full VTE terminal emulation
+
+ -- AnmiTaliDev <anmitali198@gmail.com>  Sat, 01 Feb 2026 00:00:00 +0000

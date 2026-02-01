@@ -1,0 +1,29 @@
+# Maintainer: AnmiTaliDev <anmitali198@gmail.com>
+
+pkgname=aether-command
+pkgver=0.1.0_alpha
+pkgrel=1
+pkgdesc="Modern terminal emulator for AetherDE desktop environment"
+arch=('x86_64' 'aarch64')
+url="https://github.com/NurOS-Linux/command"
+license=('GPL-3.0-or-later')
+depends=('gtk4' 'libadwaita' 'vte4')
+makedepends=('meson' 'ninja' 'vala' 'git')
+source=("git+https://github.com/NurOS-Linux/command.git#tag=v${pkgver/_/-}")
+sha256sums=('SKIP')
+
+build() {
+    cd "$srcdir/command"
+    meson setup builddir --prefix=/usr --buildtype=release
+    ninja -C builddir
+}
+
+check() {
+    cd "$srcdir/command"
+    ninja -C builddir test || true
+}
+
+package() {
+    cd "$srcdir/command"
+    DESTDIR="$pkgdir" ninja -C builddir install
+}

@@ -1,0 +1,31 @@
+Source: aether-command
+Section: utils
+Priority: optional
+Maintainer: AnmiTaliDev <anmitali198@gmail.com>
+Build-Depends: debhelper-compat (= 13),
+               meson,
+               ninja-build,
+               valac,
+               libgtk-4-dev,
+               libadwaita-1-dev,
+               libvte-2.91-gtk4-dev
+Standards-Version: 4.6.0
+Homepage: https://github.com/NurOS-Linux/command
+Vcs-Git: https://github.com/NurOS-Linux/command.git
+Vcs-Browser: https://github.com/NurOS-Linux/command
+
+Package: aether-command
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Modern terminal emulator for AetherDE desktop environment
+ Aether Command is a modern terminal emulator designed for the AetherDE desktop
+ environment. Built with GTK4 and LibAdwaita, it provides a clean and intuitive
+ interface that seamlessly integrates with GNOME-based desktops while working
+ on any Linux distribution with GTK4 support.
+ .
+ Features:
+  * Dynamic window title showing current command or shell prompt
+  * Multiple terminal tabs support
+  * Copy/paste with keyboard shortcuts (Ctrl+Shift+C/V)
+  * Full VTE terminal emulation
+  * Native LibAdwaita design

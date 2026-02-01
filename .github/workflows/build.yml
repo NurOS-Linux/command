@@ -28,24 +28,21 @@ jobs:
         run: |
           pacman -S --noconfirm gtk4 libadwaita vte4 vala meson ninja
 
-      - name: Build project
+      - name: Build package with makepkg
         run: |
-          meson setup builddir
-          ninja -C builddir
-
-      - name: Install to destdir
-        run: |
-          DESTDIR="${PWD}/pkg" ninja -C builddir install
-
-      - name: Create tarball
-        run: |
-          tar -czf aether-command-arch.tar.gz -C pkg .
+          cd packaging
+          # Create non-root user for makepkg
+          useradd -m builder
+          chown -R builder:builder ..
+          # Build package as builder user
+          su builder -c "makepkg -s --noconfirm"
+          mv *.pkg.tar.zst ../
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: aether-command-arch
-          path: aether-command-arch.tar.gz
+          path: "*.pkg.tar.zst"
 
   build-fedora:
     name: Build Fedora RPM
@@ -61,24 +58,28 @@ jobs:
         run: |
           dnf install -y gtk4-devel libadwaita-devel vte291-gtk4-devel vala meson ninja-build gcc git rpm-build rpmdevtools
 
-      - name: Build project
+      - name: Setup RPM build tree
         run: |
-          meson setup builddir
-          ninja -C builddir
+          rpmdev-setuptree
+          cp packaging/aether-command.spec ~/rpmbuild/SPECS/
 
-      - name: Install to destdir
+      - name: Create source tarball
         run: |
-          DESTDIR="${PWD}/pkg" ninja -C builddir install
+          git archive --format=tar.gz --prefix=command-0.1.0-alpha/ HEAD > ~/rpmbuild/SOURCES/v0.1.0-alpha.tar.gz
 
-      - name: Create tarball
+      - name: Build RPM
         run: |
-          tar -czf aether-command-fedora.tar.gz -C pkg .
+          rpmbuild -ba ~/rpmbuild/SPECS/aether-command.spec
+
+      - name: Copy RPM to workspace
+        run: |
+          cp ~/rpmbuild/RPMS/*/*.rpm .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: aether-command-fedora
-          path: aether-command-fedora.tar.gz
+          path: "*.rpm"
 
   build-ubuntu:
     name: Build Ubuntu DEB
@@ -91,26 +92,21 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev libadwaita-1-dev libvte-2.91-gtk4-dev valac meson ninja-build
+          sudo apt-get install -y libgtk-4-dev libadwaita-1-dev libvte-2.91-gtk4-dev valac meson ninja-build debhelper devscripts
 
-      - name: Build project
+      - name: Build DEB package
         run: |
-          meson setup builddir
-          ninja -C builddir
+          dpkg-buildpackage -us -uc -b
 
-      - name: Install to destdir
+      - name: Move DEB to workspace
         run: |
-          DESTDIR="${PWD}/pkg" ninja -C builddir install
-
-      - name: Create tarball
-        run: |
-          tar -czf aether-command-ubuntu.tar.gz -C pkg .
+          mv ../*.deb .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: aether-command-ubuntu
-          path: aether-command-ubuntu.tar.gz
+          path: "*.deb"
 
   release:
     name: Create Release
@@ -126,10 +122,39 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            aether-command-arch/aether-command-arch.tar.gz
-            aether-command-fedora/aether-command-fedora.tar.gz
-            aether-command-ubuntu/aether-command-ubuntu.tar.gz
+            aether-command-arch/*.pkg.tar.zst
+            aether-command-fedora/*.rpm
+            aether-command-ubuntu/*.deb
           draft: false
           prerelease: true
+          body: |
+            ## Aether Command v0.1.0-alpha
+
+            Initial alpha release of Aether Command terminal emulator.
+
+            ### Features
+            - Dynamic window title tracking
+            - Tab support for multiple terminals
+            - Copy/paste keyboard shortcuts (Ctrl+Shift+C/V)
+            - Right-click context menu
+            - GTK4 and LibAdwaita integration
+            - Full VTE terminal emulation
+
+            ### Installation
+
+            **Arch Linux:**
+            ```bash
+            sudo pacman -U aether-command-*.pkg.tar.zst
+            ```
+
+            **Fedora:**
+            ```bash
+            sudo dnf install aether-command-*.rpm
+            ```
+
+            **Ubuntu/Debian:**
+            ```bash
+            sudo apt install ./aether-command_*.deb
+            ```
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
