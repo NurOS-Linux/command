@@ -1,0 +1,135 @@
+name: Build and Package
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-arch:
+    name: Build Arch Linux Package
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Update system
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm base-devel git
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          pacman -S --noconfirm gtk4 libadwaita vte4 vala meson ninja
+
+      - name: Build project
+        run: |
+          meson setup builddir
+          ninja -C builddir
+
+      - name: Install to destdir
+        run: |
+          DESTDIR="${PWD}/pkg" ninja -C builddir install
+
+      - name: Create tarball
+        run: |
+          tar -czf aether-command-arch.tar.gz -C pkg .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aether-command-arch
+          path: aether-command-arch.tar.gz
+
+  build-fedora:
+    name: Build Fedora RPM
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          dnf install -y gtk4-devel libadwaita-devel vte291-gtk4-devel vala meson ninja-build gcc git rpm-build rpmdevtools
+
+      - name: Build project
+        run: |
+          meson setup builddir
+          ninja -C builddir
+
+      - name: Install to destdir
+        run: |
+          DESTDIR="${PWD}/pkg" ninja -C builddir install
+
+      - name: Create tarball
+        run: |
+          tar -czf aether-command-fedora.tar.gz -C pkg .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aether-command-fedora
+          path: aether-command-fedora.tar.gz
+
+  build-ubuntu:
+    name: Build Ubuntu DEB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-4-dev libadwaita-1-dev libvte-2.91-gtk4-dev valac meson ninja-build
+
+      - name: Build project
+        run: |
+          meson setup builddir
+          ninja -C builddir
+
+      - name: Install to destdir
+        run: |
+          DESTDIR="${PWD}/pkg" ninja -C builddir install
+
+      - name: Create tarball
+        run: |
+          tar -czf aether-command-ubuntu.tar.gz -C pkg .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aether-command-ubuntu
+          path: aether-command-ubuntu.tar.gz
+
+  release:
+    name: Create Release
+    needs: [build-arch, build-fedora, build-ubuntu]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            aether-command-arch/aether-command-arch.tar.gz
+            aether-command-fedora/aether-command-fedora.tar.gz
+            aether-command-ubuntu/aether-command-ubuntu.tar.gz
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

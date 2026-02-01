@@ -1,5 +1,5 @@
 project('aether-command', 'vala', 'c',
-    version: '0.0.1',
+    version: '0.1.0-alpha',
     license: 'GPL-3.0-or-later'
 )
 
@@ -11,6 +11,13 @@ add_project_arguments([
     '--pkg=vte-2.91-gtk4',
     '--gresources', join_paths(meson.current_source_dir(), 'data', 'org.aether.command.gresource.xml')
 ], language: 'vala')
+
+add_project_arguments([
+    '-Wno-discarded-qualifiers',
+    '-Wno-unused-variable',
+    '-Wno-unused-label',
+    '-Wno-deprecated-declarations'
+], language: 'c')
 
 dependencies = [
     dependency('gtk4'),

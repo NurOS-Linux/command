@@ -1,16 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <component type="desktop-application">
   <id>org.aether.command</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <name>Aether Command</name>
-  <summary>Modern terminal emulator built with GTK4 and LibAdwaita</summary>
+  <summary>Modern terminal emulator for AetherDE desktop environment</summary>
   <description>
     <p>
-      Aether Command is a modern terminal emulator that provides a clean and intuitive interface 
-      built with GTK4 and LibAdwaita. It offers a streamlined terminal experience with modern 
-      design principles.
+      Aether Command is a modern terminal emulator designed for the AetherDE desktop environment.
+      Built with GTK4 and LibAdwaita, it provides a clean and intuitive interface that seamlessly
+      integrates with GNOME-based desktops while working on any Linux distribution with GTK4 support.
     </p>
+    <p>Features:</p>
+    <ul>
+      <li>Dynamic window title showing current command or shell prompt</li>
+      <li>Multiple terminal tabs support</li>
+      <li>Copy/paste with keyboard shortcuts (Ctrl+Shift+C/V)</li>
+      <li>Full VTE terminal emulation</li>
+      <li>Native LibAdwaita design</li>
+    </ul>
   </description>
   <launchable type="desktop-id">org.aether.command.desktop</launchable>
   <url type="homepage">https://github.com/NurOS-Linux/command</url>
@@ -18,9 +26,16 @@
   <developer_name>AnmiTaliDev</developer_name>
   <update_contact>anmitali198@gmail.com</update_contact>
   <releases>
-    <release version="@version@" date="2025-08-19">
+    <release version="@version@">
       <description>
         <p>Initial release of Aether Command terminal emulator.</p>
+        <ul>
+          <li>Basic VTE terminal emulation</li>
+          <li>Dynamic window title tracking</li>
+          <li>Tab support for multiple terminals</li>
+          <li>Copy/paste keyboard shortcuts</li>
+          <li>GTK4 and LibAdwaita integration</li>
+        </ul>
       </description>
     </release>
   </releases>
