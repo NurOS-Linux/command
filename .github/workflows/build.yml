@@ -65,7 +65,7 @@ jobs:
 
       - name: Create source tarball
         run: |
-          tar --transform='s,^\.,command-0.1.0-alpha,' -czf ~/rpmbuild/SOURCES/v0.1.0-alpha.tar.gz --exclude='.git' --exclude='builddir' --exclude='.github' .
+          tar --transform='s,^\.,command-0.1.0~alpha,' -czf ~/rpmbuild/SOURCES/v0.1.0~alpha.tar.gz --exclude='.git' --exclude='builddir' --exclude='.github' .
 
       - name: Build RPM
         run: |

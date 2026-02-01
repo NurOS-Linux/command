@@ -169,12 +169,3 @@ Copyright (C) 2026 NurOS
 ## Developer
 
 AnmiTaliDev <anmitali198@gmail.com>
-
-## Links
-
-- [GitHub Repository](https://github.com/NurOS-Linux/command)
-- [Report Issues](https://github.com/NurOS-Linux/command/issues)
-- [NurOS Linux](https://nuros.org)
-- [AetherDE Desktop Environment](https://github.com/NurOS-Linux/AetherDE)
-- [VTE Documentation](https://gnome.pages.gitlab.gnome.org/vte/)
-- [LibAdwaita Documentation](https://gnome.pages.gitlab.gnome.org/libadwaita/)
