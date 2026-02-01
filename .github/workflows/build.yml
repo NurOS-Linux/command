@@ -56,7 +56,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          dnf install -y gtk4-devel libadwaita-devel vte291-gtk4-devel vala meson ninja-build gcc git rpm-build rpmdevtools
+          dnf install -y gtk4-devel libadwaita-devel vte291-gtk4-devel vala meson ninja-build gcc git rpm-build rpmdevtools tar gzip
 
       - name: Setup RPM build tree
         run: |
@@ -65,7 +65,7 @@ jobs:
 
       - name: Create source tarball
         run: |
-          git archive --format=tar.gz --prefix=command-0.1.0-alpha/ HEAD > ~/rpmbuild/SOURCES/v0.1.0-alpha.tar.gz
+          tar --transform='s,^\.,command-0.1.0-alpha,' -czf ~/rpmbuild/SOURCES/v0.1.0-alpha.tar.gz --exclude='.git' --exclude='builddir' --exclude='.github' .
 
       - name: Build RPM
         run: |
